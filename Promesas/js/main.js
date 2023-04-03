@@ -20,19 +20,39 @@ let producto= [
     {"id":19,"title":"Opna Women's Short Sleeve Moisture","price":7.95,"description":"100% Polyester, Machine wash, 100% cationic polyester interlock, Machine Wash & Pre Shrunk for a Great Fit, Lightweight, roomy and highly breathable with moisture wicking fabric which helps to keep moisture away, Soft Lightweight Fabric with comfortable V-neck collar and a slimmer fit, delivers a sleek, more feminine silhouette and Added Comfort","category":"women's clothing","image":"https://fakestoreapi.com/img/51eg55uWmdL._AC_UX679_.jpg","rating":{"rate":4.5,"count":146}},
     {"id":20,"title":"DANVOUY Womens T Shirt Casual Cotton Short","price":12.99,"description":"95%Cotton,5%Spandex, Features: Casual, Short Sleeve, Letter Print,V-Neck,Fashion Tees, The fabric is soft and has some stretch., Occasion: Casual/Office/Beach/School/Home/Street. Season: Spring,Summer,Autumn,Winter.","category":"women's clothing","image":"https://fakestoreapi.com/img/61pHAEJ4NML._AC_UX679_.jpg","rating":{"rate":3.6,"count":145}}
 ];
-//producto=null;
-function getProducto(){
-    return new Promise((resolve, reject)=>{
-        if (producto== null){
-            reject(new Error("Producto no existe"));
-        } //if == null
 
-        setTimeout(()=>{
-            resolve(producto);
-            } , 2000);
-    });// new promise   
-}// getProducto
+console.log(getProducto());
+
+let galeria = document.getElementById("galeria");
+
+function getProducto(){
+    return new Promise((resolve, reject) => {
+        if (producto==null){
+            reject(new Error("Producto no existe"))
+        }//if ==null
+        setTimeout( ()=>{
+            resolve (producto);
+        }, 2000);
+    }); // new Promise
+}//getProducto
 
 getProducto()
-        .then((prod)=> console.log(prod))
-        .catch((err)=> console.log(err.message));
+             .then((prod)=>galeriaProducto(prod))   //resolve: se ejecuta si getProducto se cumple
+             .catch((err) => console.log(err.message));     //reject: se ejecuta si getProducto no se cumple
+
+function galeriaProducto(producto){
+    let catalogo = '';
+    producto.forEach(function(imagen){
+        catalogo += `
+                  <div class="card" style="width: 18rem;">
+                     <img src="${imagen.image}" class="card-img-top" alt="${imagen.id}">
+                      <div class="card-body">
+                      <h5 class="card-title">${imagen.title}</h5>
+                      <p class="card-text">${imagen.description}</p>
+                      <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                  </div>
+                 `
+    });
+    galeria.insertAdjacentHTML("beforeend",catalogo);
+}
