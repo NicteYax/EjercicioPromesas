@@ -20,31 +20,56 @@ let producto= [
     {"id":19,"title":"Opna Women's Short Sleeve Moisture","price":7.95,"description":"100% Polyester, Machine wash, 100% cationic polyester interlock, Machine Wash & Pre Shrunk for a Great Fit, Lightweight, roomy and highly breathable with moisture wicking fabric which helps to keep moisture away, Soft Lightweight Fabric with comfortable V-neck collar and a slimmer fit, delivers a sleek, more feminine silhouette and Added Comfort","category":"women's clothing","image":"https://fakestoreapi.com/img/51eg55uWmdL._AC_UX679_.jpg","rating":{"rate":4.5,"count":146}},
     {"id":20,"title":"DANVOUY Womens T Shirt Casual Cotton Short","price":12.99,"description":"95%Cotton,5%Spandex, Features: Casual, Short Sleeve, Letter Print,V-Neck,Fashion Tees, The fabric is soft and has some stretch., Occasion: Casual/Office/Beach/School/Home/Street. Season: Spring,Summer,Autumn,Winter.","category":"women's clothing","image":"https://fakestoreapi.com/img/61pHAEJ4NML._AC_UX679_.jpg","rating":{"rate":3.6,"count":145}}
 ];
-
-console.log(getProducto());
+//función de promesa es asíncrona, es una condición que se va a evaluar hasta que lleguen los datos necesarios para hacer
+//la evaluación. Un if se ejecuta en orden en su línea de código si no se cumple su condición arroja un resultado ya que 
+//evalua al momento. La promesa se puede ejecutar o evaluar en cualquier momento siempre y cuando lleguen los datos
+//console.log(getProducto());
 
 let galeria = document.getElementById("galeria");
 
-function getProducto(){
-    return new Promise((resolve, reject) => {
-        if (producto==null){
-            reject(new Error("Producto no existe"))
-        }//if ==null
-        setTimeout( ()=>{
-            resolve (producto);
-        }, 2000);
-    }); // new Promise
-}//getProducto
+// function getProducto(){
+//     return new Promise((resolve, reject) => {
+//         if (producto==null){
+//             reject(new Error("Producto no existe"))
+//         }//if ==null
+//         setTimeout( ()=>{
+//             resolve (producto);
+//         }, 2000);
+//     }); // new Promise
+// }//getProducto
 
-getProducto()
-             .then((prod)=>galeriaProducto(prod))   //resolve: se ejecuta si getProducto se cumple
-             .catch((err) => console.log(err.message));     //reject: se ejecuta si getProducto no se cumple
+function getProducto(){  //con fetch
+    let promesa= fetch ("https://fakestoreapi.com/products", {
+        method: "GET"
+    });
+
+    promesa.then((response)=>{
+        response.json().then((prods)=>{
+                galeriaProducto(prods); //crear las cards
+                console.log("prods=>json()");
+                console.log(prods);
+            }// prods
+            )// then json
+            .catch( (err)=>{
+                console.error("Error en el formato de la respuesta " + err.message);
+            });// catch json
+        } //response 
+    )//then
+    .catch( (error)=>{
+        console.error("Error en la respuesta " + error.message);
+    })
+}
+
+getProducto();
+             //.then((prod)=>galeriaProducto(prod))   //resolve: se ejecuta si getProducto se cumple
+             //.catch((err) => console.log(err.message));     //reject: se ejecuta si getProducto no se cumple
 
 function galeriaProducto(producto){
     let catalogo = '';
+    //for each se va de uno en uno de cada índice de un arreglo 
     producto.forEach(function(imagen){
         catalogo += `
-                  <div class="card" style="width: 18rem;">
+                  <div class="card" style="width: 18rem; margin-bottom= 1rem">
                      <img src="${imagen.image}" class="card-img-top" alt="${imagen.id}">
                       <div class="card-body">
                       <h5 class="card-title">${imagen.title}</h5>
